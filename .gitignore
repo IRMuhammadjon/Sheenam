@@ -397,3 +397,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 /Sheenam.Api/appsettings.Development.json
+/Sheenam.Api/Properties/launchSettings.json
