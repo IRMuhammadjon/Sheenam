@@ -6,14 +6,13 @@
 
 
 
-using Microsoft.EntityFrameworkCore;
 using Sheenam.Api.Models.Foundations.Guests;
 
 namespace Sheenam.Api.Brokers.Storages
 {
-    public partial class StorageBroker
+    public partial interface IStorageBroker
     {
-        public DbSet<Guest> Guests { get; set; }
+        ValueTask<Guest> GetBrokerAsync(Guest guest);
 
     }
 }
