@@ -15,7 +15,7 @@ namespace Sheenam.Api.Brokers.Storages
     public partial class StorageBroker
     {
         public DbSet<Guest> Guests { get; set; }
-        public async ValueTask<Guest> GetBrokerAsync(Guest guest)
+        public async ValueTask<Guest> InsertGuestAsync(Guest guest)
         {
             using var broker = new StorageBroker(this.configuration);
             
