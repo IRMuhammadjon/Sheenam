@@ -3,6 +3,9 @@
 // Free To Use To Find Comfort and Peace
 //==========================================================
 
+
+
+using Sheenam.Api.Brokers.Loggings;
 using Sheenam.Api.Brokers.Storages;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,7 +16,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<StorageBroker>();
-builder.Services.AddTransient<IStorageBroker, StorageBroker>();
+AddBrokers(builder);
 
 var app = builder.Build();
 
@@ -29,3 +32,8 @@ app.MapControllers();
 app.Run();
 
 
+ static void AddBrokers(WebApplicationBuilder builder)
+{
+    builder.Services.AddTransient<IStorageBroker, StorageBroker>();
+    builder.Services.AddTransient<ILoggingBroker, LoggingBroker>();
+}
