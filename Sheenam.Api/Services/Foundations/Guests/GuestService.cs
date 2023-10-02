@@ -6,6 +6,7 @@
 using Sheenam.Api.Brokers.Loggings;
 using Sheenam.Api.Brokers.Storages;
 using Sheenam.Api.Models.Foundations.Guests;
+using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 
 namespace Sheenam.Api.Services.Foundations.Guests
 {
@@ -24,8 +25,26 @@ namespace Sheenam.Api.Services.Foundations.Guests
 
         public async ValueTask<Guest> AddGuestAsync(Guest guest)
         {
-             
-             return await this.storageBroker.InsertGuestAsync(guest);
+            try
+            {
+                if (guest is null)
+                {
+                    throw new NullGuestException();
+                }
+            
+                return await this.storageBroker.InsertGuestAsync(guest);
+            }
+            catch (NullGuestException NullGuestException)
+            {
+                var guestValidationException=
+                    new GuestvalidationException(NullGuestException);
+
+                this.loggingBroker.LogError(guestValidationException);
+
+                throw guestValidationException;
+            }
+           
+            
         }
 
     }
