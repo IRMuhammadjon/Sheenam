@@ -4,6 +4,7 @@
 //==========================================================
 
 
+using System.Linq.Expressions;
 using FluentAssertions;
 using Moq;
 using Sheenam.Api.Brokers.Loggings;
@@ -11,7 +12,9 @@ using Sheenam.Api.Brokers.Storages;
 using Sheenam.Api.Models.Foundations.Guests;
 using Sheenam.Api.Services.Foundations.Guests;
 using Tynamix.ObjectFiller;
+using Xeptions;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
 {
@@ -37,6 +40,13 @@ namespace Sheenam.Api.Tests.Unit.Services.Foundations.Guests
         private static DateTimeOffset GetRandomDateTimeOffset() =>
             new DateTimeRange(earliestDate:  new DateTime()).GetValue();
 
+        private Expression<Func<Xeption,bool>> SameExceptionAs(Xeption expectedExeption)
+        {
+            return actualException =>
+            actualException.Message == expectedExeption.Message
+            && actualException.InnerException.Message == expectedExeption.InnerException.Message
+            && (actualException.InnerException as Xeption).DataEquals(expectedExeption.InnerException.Data);
+        }
         private static Filler<Guest> CreateGuestFiller(DateTimeOffset date)
         {
             var filler = new Filler<Guest>();
