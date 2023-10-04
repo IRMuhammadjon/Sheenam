@@ -10,7 +10,7 @@ using Sheenam.Api.Models.Foundations.Guests.Exceptions;
 
 namespace Sheenam.Api.Services.Foundations.Guests
 {
-    public class GuestService : IGuestService
+    public partial class GuestService : IGuestService
     {
         private readonly IStorageBroker storageBroker;
         private readonly ILoggingBroker loggingBroker;
@@ -22,30 +22,14 @@ namespace Sheenam.Api.Services.Foundations.Guests
             this.storageBroker = storageBroker;
             this.loggingBroker = loggingBroker;
         }
-
-        public async ValueTask<Guest> AddGuestAsync(Guest guest)
+        // Exeption Noise Cancell
+        public  ValueTask<Guest> AddGuestAsync(Guest guest) =>
+            TryCatch(async () =>
         {
-            try
-            {
-                if (guest is null)
-                {
-                    throw new NullGuestException();
-                }
-            
-                return await this.storageBroker.InsertGuestAsync(guest);
-            }
-            catch (NullGuestException NullGuestException)
-            {
-                var guestValidationException=
-                    new GuestvalidationException(NullGuestException);
+            ValidationGuestNotNoll(guest);
 
-                this.loggingBroker.LogError(guestValidationException);
-
-                throw guestValidationException;
-            }
-           
-            
-        }
+            return await this.storageBroker.InsertGuestAsync(guest);
+        });
 
     }
 }
